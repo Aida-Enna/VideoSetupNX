@@ -44,6 +44,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.txtBannerFile = new System.Windows.Forms.TextBox();
             this.lblStep3 = new System.Windows.Forms.Label();
+            this.chkResize = new System.Windows.Forms.CheckBox();
+            this.chkAspectRatio = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -178,11 +181,49 @@
             this.lblStep3.TabIndex = 14;
             this.lblStep3.Text = "Step 3: Select a banner file (1280x140 recommended)";
             // 
+            // chkResize
+            // 
+            this.chkResize.AutoSize = true;
+            this.chkResize.Location = new System.Drawing.Point(241, 249);
+            this.chkResize.Name = "chkResize";
+            this.chkResize.Size = new System.Drawing.Size(154, 17);
+            this.chkResize.TabIndex = 17;
+            this.chkResize.Text = "Resize videos to 1280x720";
+            this.chkResize.UseVisualStyleBackColor = true;
+            this.chkResize.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // chkAspectRatio
+            // 
+            this.chkAspectRatio.AutoSize = true;
+            this.chkAspectRatio.Enabled = false;
+            this.chkAspectRatio.Location = new System.Drawing.Point(241, 270);
+            this.chkAspectRatio.Name = "chkAspectRatio";
+            this.chkAspectRatio.Size = new System.Drawing.Size(176, 17);
+            this.chkAspectRatio.TabIndex = 18;
+            this.chkAspectRatio.Text = "Keep aspect ratio when resizing";
+            this.chkAspectRatio.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 291);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(311, 39);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Credits:\r\nSuperOkazaki/OkazakiTheOtaku for their awesome HTML work\r\n(https://gith" +
+    "ub.com/SuperOkazaki/HTML-Video-Template-NX)";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            this.label2.MouseLeave += new System.EventHandler(this.label2_MouseLeave);
+            this.label2.MouseHover += new System.EventHandler(this.label2_MouseHover);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(413, 295);
+            this.ClientSize = new System.Drawing.Size(413, 340);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.chkAspectRatio);
+            this.Controls.Add(this.chkResize);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.txtBannerFile);
             this.Controls.Add(this.lblStep3);
@@ -224,6 +265,9 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox txtBannerFile;
         private System.Windows.Forms.Label lblStep3;
+        private System.Windows.Forms.CheckBox chkResize;
+        private System.Windows.Forms.CheckBox chkAspectRatio;
+        private System.Windows.Forms.Label label2;
     }
 }
 

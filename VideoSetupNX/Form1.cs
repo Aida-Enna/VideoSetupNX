@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VideoPreperationTool
@@ -118,6 +119,7 @@ namespace VideoPreperationTool
 
                 if (resourceName.Contains(".css"))
                 {
+                    if (File.Exists(@"Output\css\" + resourceName.Replace("VideoSetupNX.Resources.", ""))) File.Delete(@"Output\css\" + resourceName.Replace("VideoSetupNX.Resources.", ""));
                     var output = File.OpenWrite(@"Output\css\" + resourceName.Replace("VideoSetupNX.Resources.", ""));
                     resourceToSave.CopyTo(output);
                     output.Close();
@@ -125,14 +127,18 @@ namespace VideoPreperationTool
 
                 if (resourceName.Contains(".js"))
                 {
+                    if (File.Exists(@"Output\js\" + resourceName.Replace("VideoSetupNX.Resources.", ""))) File.Delete(@"Output\js\" + resourceName.Replace("VideoSetupNX.Resources.", ""));
                     var output = File.OpenWrite(@"Output\js\" + resourceName.Replace("VideoSetupNX.Resources.", ""));
+
                     resourceToSave.CopyTo(output);
                     output.Close();
                 }
 
                 if (resourceName.Contains(".png") & String.IsNullOrEmpty(txtBannerFile.Text))
                 {
+                    if (File.Exists(@"Output\img\" + resourceName.Replace("VideoSetupNX.Resources.", ""))) File.Delete(@"Output\img\" + resourceName.Replace("VideoSetupNX.Resources.", ""));
                     var output = File.OpenWrite(@"Output\img\" + resourceName.Replace("VideoSetupNX.Resources.", ""));
+
                     resourceToSave.CopyTo(output);
                     output.Close();
                 }
@@ -140,8 +146,16 @@ namespace VideoPreperationTool
                 resourceToSave.Close();
             }
 
+            if (String.IsNullOrEmpty(txtBannerFile.Text) == false)
+            {
+                if (File.Exists(txtBannerFile.Text))
+                {
+                    if (File.Exists(@"Output\img\banner.png")) File.Delete(@"Output\img\banner.png");
+                    File.Copy(txtBannerFile.Text, @"Output\img\banner.png");
+                }
+            }
             string CompleteHTML = HTML1 + TotalVideoHTML + HTML2;
-            File.WriteAllText(@"Output\index.html",CompleteHTML.Replace("REPLACEMETITLE", txtTitle.Text).Replace("REPLACEMENAME", txtYourName.Text));
+            File.WriteAllText(@"Output\index.html", CompleteHTML.Replace("REPLACEMETITLE", txtTitle.Text).Replace("REPLACEMENAME", txtYourName.Text));
             Process.Start("Output");
         }
 
@@ -161,8 +175,12 @@ namespace VideoPreperationTool
             txtVideoDirectory.Text = filepath;
         }
 
-        private void btnConvertSwitchVideos_Click(object sender, EventArgs e)
+        private async void btnConvertSwitchVideos_Click(object sender, EventArgs e)
         {
+            
+            //Try to convert the file *with* subs
+            //If it fails, try without.
+            //If it fails again idk
             string filepath = String.Empty;
             using (var fbd = new FolderBrowserDialog())
             {
@@ -176,6 +194,7 @@ namespace VideoPreperationTool
 
             int count = 0;
             DirectoryInfo d = new DirectoryInfo(filepath);
+            int TotalVideos = d.GetFiles("*.*").Length;
             string TotalVideoHTML = string.Empty;
             foreach (var file in d.GetFiles("*.*"))
             {
@@ -186,16 +205,31 @@ namespace VideoPreperationTool
                 string FilenameAfterConversion = file.FullName + ".switch.mp4";
 
                 startInfo.FileName = @"cmd.exe";
-                startInfo.Arguments = "/C ffmpeg -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                if (chkResize.Checked)
+                {
+                    if (chkAspectRatio.Checked)
+                    {
+                        startInfo.Arguments = "/C ffmpeg -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -vf scale=-1:720 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                    }
+                    else
+                    {
+                        startInfo.Arguments = "/C ffmpeg -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -vf scale=1280:720 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                    }
+                }
+                else
+                {
+                    startInfo.Arguments = "/C ffmpeg -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                }
                 startInfo.RedirectStandardOutput = true;
                 startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = true;
+                startInfo.CreateNoWindow = false;
                 process.StartInfo = startInfo;
                 process.Start();
 
-                btnConvertSwitchVideos.Text = "Converting " + count + "/" + d.GetFiles("*.*").Length;
+                btnConvertSwitchVideos.Text = "Converting " + count + "/" + TotalVideos;
 
                 process.WaitForExit();
+                MessageBox.Show("Conversion completed!");
             }
         }
 
@@ -216,6 +250,26 @@ namespace VideoPreperationTool
             {
                 txtBannerFile.Text = BannerDialog.FileName;
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            chkAspectRatio.Enabled = chkResize.Checked;
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/SuperOkazaki/HTML-Video-Template-NX");
+        }
+
+        private void label2_MouseHover(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.Hand;
+        }
+
+        private void label2_MouseLeave(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.Default;
         }
     }
 }
