@@ -4,13 +4,12 @@ I threw together a quick app for creating HTML files (using https://gbatemp.net/
 
 __Features__
 - Generates customized HTML from a folder of switch-compatible video files
-- Converts video files to Switch-compatible format (requires ffmpeg pre-installed)
+- Converts video files to Switch-compatible format with optional resizing. (requires ffmpeg pre-installed)
 - Autocreates episode preview snapshots
 - Automatically sets up directories, HTML/CSS/JS files. Just drop your videos into the vids folder!
 
 __Issues__
 - Video files containing subs will lose subtitles upon Conversion. This will be fixed in an update soon.
-- Videos will not be resized yet. This will also come in a new version as I work on my ffmpeg-fu.
 
 __Usage__
 
