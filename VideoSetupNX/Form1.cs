@@ -229,8 +229,8 @@ namespace VideoPreperationTool
                 btnConvertSwitchVideos.Text = "Converting " + count + "/" + TotalVideos;
 
                 process.WaitForExit();
-                MessageBox.Show("Conversion completed!");
             }
+            MessageBox.Show("Conversion completed!");
         }
 
         private void button2_Click(object sender, EventArgs e)
