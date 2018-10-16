@@ -1,0 +1,9 @@
+*.user
+*.psess
+*.vsp
+..svnbridge
+/.vs/
+/packages/
+/VideoSetupNX/bin
+/VideoSetupNX/obj
+*.suo
