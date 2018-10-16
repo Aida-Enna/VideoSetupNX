@@ -20,3 +20,7 @@ __Screenshots__
 ![GUI Screenshot](http://aida.moe/share/vXWH.png)
 
 ![End Result](http://aida.moe/share/I3rd.png)
+
+__Credits__
+
+SuperOkazaki/OkazakiTheOtaku for their awesome HTML work (https://github.com/SuperOkazaki/HTML-Video-Template-NX)
