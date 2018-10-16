@@ -13,6 +13,7 @@ __Issues__
 - Videos will not be resized yet. This will also come in a new version as I work on my ffmpeg-fu.
 
 __Usage__
+
 Follow each step, then hit "Generate project". It'll open the output directory when it's complete. Copy the videos you selected in Step 2 into the "vids" folder, then build the entire output folder (the stuff in the folder, not the folder itself!) with the Homebrew Web Framework.
 
 __Screenshots__
