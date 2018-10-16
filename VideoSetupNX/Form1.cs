@@ -222,7 +222,7 @@ namespace VideoPreperationTool
                 }
                 startInfo.RedirectStandardOutput = true;
                 startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = false;
+                startInfo.CreateNoWindow = true;
                 process.StartInfo = startInfo;
                 process.Start();
 
