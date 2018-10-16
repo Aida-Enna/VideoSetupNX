@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSetupNX", "VideoSetupNX\VideoSetupNX.csproj", "{CFB691BB-934C-4984-A8C5-BE70F5467E18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFB691BB-934C-4984-A8C5-BE70F5467E18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFB691BB-934C-4984-A8C5-BE70F5467E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFB691BB-934C-4984-A8C5-BE70F5467E18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFB691BB-934C-4984-A8C5-BE70F5467E18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AEA20302-181D-41E3-BA0A-B4E74FC2EE30}
+	EndGlobalSection
+EndGlobal
