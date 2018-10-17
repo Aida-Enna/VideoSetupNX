@@ -13,6 +13,7 @@ __Issues__
 - None I'm aware of!
 
 __Requirements__
+
 FFMPEG (https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg)
 You can, alternatively, just download a build from here and put the files in the bin folder in the same place as the VideoSetupNX.exe.
 
