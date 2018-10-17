@@ -31,7 +31,7 @@ __Screenshots__
 
 ![GUI Screenshot](http://aida.moe/share/BJeY.png)
 
-![End Result](http://aida.moe/share/I3rd.png)
+![End Result](http://aida.moe/share/CznF.png)
 
 __Credits__
 
