@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VideoPreperationTool
@@ -33,7 +32,7 @@ namespace VideoPreperationTool
 "      <div class=\"container\">" + Environment.NewLine +
 "        <div class=\"row\">" + Environment.NewLine +
 "          <div class=\"col-lg-12 mb-4 mt-2 text-center\">" + Environment.NewLine +
-"            <h2>Video List</h2>" + Environment.NewLine +
+"            <h2>REPLACEMETITLE</h2>" + Environment.NewLine +
 "          </div>" + Environment.NewLine +
 "        </div>" + Environment.NewLine +
 "      </div>" + Environment.NewLine +
@@ -94,7 +93,7 @@ namespace VideoPreperationTool
             string TotalVideoHTML = string.Empty;
             foreach (var file in d.GetFiles("*.mp4"))
             {
-                TotalVideoHTML = TotalVideoHTML + VideoHTML.Replace("replaceme.mp4", file.Name).Replace("VIDEONAME", file.Name).Replace("VIDEOPREVIEWREPLACE", file.Name + "_thumb");
+                TotalVideoHTML = TotalVideoHTML + VideoHTML.Replace("replaceme.mp4", file.Name).Replace("VIDEONAME", file.Name.Replace(file.Extension, "")).Replace("VIDEOPREVIEWREPLACE", file.Name + "_thumb");
 
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -175,9 +174,8 @@ namespace VideoPreperationTool
             txtVideoDirectory.Text = filepath;
         }
 
-        private async void btnConvertSwitchVideos_Click(object sender, EventArgs e)
+        private void btnConvertSwitchVideos_Click(object sender, EventArgs e)
         {
-            
             //Try to convert the file *with* subs
             //If it fails, try without.
             //If it fails again idk
@@ -220,7 +218,6 @@ namespace VideoPreperationTool
                             //Resizing, keeping subs
                             startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -disposition:s default+forced -filter_complex \"[0:v][sub]overlay,scale = 1280:720\" -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
                         }
-
                     }
                     else
                     {
@@ -228,7 +225,6 @@ namespace VideoPreperationTool
                         //cmd.exe /C ffmpeg -y -i "%1" -vcodec libx264 -preset fast -f mp4 -vf subtitles="%~n1%~x1" -disposition:s default+forced -c:a aac -ac 2 "%1.converted.mp4" & PAUSE
                         startInfo.Arguments = startInfo.Arguments.Replace(" -c:a", " -vf subtitles=\"" + file.Name + "\" -disposition:s default+forced -c:a");
                     }
-                 
                 }
                 if (chkResize.Checked & !chkKeepSubs.Checked)
                 {
@@ -246,6 +242,10 @@ namespace VideoPreperationTool
                 if (!chkResize.Checked & !chkKeepSubs.Checked)
                 {
                     startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                }
+                if (chkOnlyConvertAudio.Checked)
+                {
+                    startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -c:v copy -f mp4 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
                 }
                 startInfo.RedirectStandardOutput = true;
                 startInfo.UseShellExecute = false;
@@ -322,6 +322,161 @@ namespace VideoPreperationTool
             catch (UnauthorizedAccessException)
             {
                 Directory.Delete(path, true);
+            }
+        }
+
+        private void chkOnlyConvertAudio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkOnlyConvertAudio.Checked)
+            {
+                MessageBox.Show("PLEASE NOTE: This option will not modify the video and will only convert the audio to AAC. Please make sure your videos are already using H264 using the \"Check Compatiblity of Video\" button!");
+                chkAspectRatio.Checked = false;
+                chkKeepSubs.Checked = false;
+                chkResize.Checked = false;
+            }
+            chkAspectRatio.Enabled = !chkOnlyConvertAudio.Checked;
+            chkKeepSubs.Enabled = !chkOnlyConvertAudio.Checked;
+            chkResize.Enabled = !chkOnlyConvertAudio.Checked;
+        }
+
+        private void btnCheckVideo_Click(object sender, EventArgs e)
+        {
+            string FileToCheck = string.Empty;
+            string Output = string.Empty;
+
+            OpenFileDialog FileToCheckDialog = new OpenFileDialog();
+
+            FileToCheckDialog.Title = "Please select a video file to test";
+            FileToCheckDialog.Filter = "Switch Video Files|*.mp4;*.mkv|All files (*.*)|*.*";
+            FileToCheckDialog.FilterIndex = 0;
+            FileToCheckDialog.RestoreDirectory = true;
+
+            if (FileToCheckDialog.ShowDialog() == DialogResult.OK)
+            {
+                FileToCheck = FileToCheckDialog.FileName;
+            }
+
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
+            startInfo.FileName = @"cmd.exe";
+            startInfo.Arguments = "/C ffprobe -v error -show_entries stream=codec_name -of default=nokey=1:noprint_wrappers=1 \"" + FileToCheck + "\"";
+            startInfo.RedirectStandardOutput = true;
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            process.StartInfo = startInfo;
+            process.Start();
+            int count = 0;
+            string VideoCodec = string.Empty;
+            string AudioCodec = string.Empty;
+            string Subtitle = string.Empty;
+            while (!process.StandardOutput.EndOfStream)
+            {
+                count++;
+                string Currentline = process.StandardOutput.ReadLine();
+                switch (count)
+                {
+                    case 1:
+                        VideoCodec = Currentline.ToUpper();
+                        if (VideoCodec == "H264")
+                        {
+                            VideoCodec = VideoCodec + " ✓";
+                        }
+                        else
+                        {
+                            VideoCodec = VideoCodec + " ✕";
+                        }
+                        Output = Output + "Video: " + VideoCodec + Environment.NewLine;
+                        break;
+                    case 2:
+                        AudioCodec = Currentline.ToUpper();
+                        if (AudioCodec == "AAC")
+                        {
+                            AudioCodec = AudioCodec + " ✓";
+                        }
+                        else
+                        {
+                            AudioCodec = AudioCodec + " ✕";
+                        }
+                        Output = Output + "Audio: " + AudioCodec + Environment.NewLine;
+                        break;
+                    case 3:
+                        Subtitle = Currentline.ToUpper(); ;
+                        Output = Output + "Subtitle: " + Subtitle + Environment.NewLine;
+                        break;
+                    case 4:
+                        Output = "Too many streams (" + count + ") - This file is unlikely to work on the switch.";
+                        break;
+                    default:
+                        Output = "Too many streams (" + count + ") - This file is unlikely to work on the switch.";
+                        break;
+                }
+                // do something with line
+            }
+            process.WaitForExit();
+
+            startInfo.Arguments = "/C ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 \"" + FileToCheck + "\"";
+            process.StartInfo = startInfo;
+            process.Start();
+
+            string WidthHeight = string.Empty;
+
+            while (!process.StandardOutput.EndOfStream)
+            {
+                WidthHeight = process.StandardOutput.ReadLine();
+            }
+
+            string[] WidthHeightSplit = WidthHeight.Split(',');
+            int Width = Convert.ToInt32(WidthHeightSplit[0].Replace(",", ""));
+            int Height = Convert.ToInt32(WidthHeightSplit[1].Replace(",",""));
+
+            string Resolution = "Resolution: " + Environment.NewLine;
+
+            if (Width > 1280)
+            {
+                Resolution = Resolution + "Width: " + Width + " ✕" + Environment.NewLine;
+            }
+            else
+            {
+                Resolution = Resolution + "Width: " + Width + " ✓" + Environment.NewLine;
+            }
+            if (Height > 720)
+            {
+                Resolution = Resolution + "Height: " + Height + " ✕" + Environment.NewLine;
+            }
+            else
+            {
+                Resolution = Resolution + "Height: " + Height + " ✓" + Environment.NewLine;
+            }
+
+            //ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 input.mp4
+
+            string Errors = "The following issues were found with your file (" + FileToCheckDialog.SafeFileName + "):" + Environment.NewLine;
+
+            if (VideoCodec.Contains("✕")) Errors = Errors + "The video codec is not compatible with the switch. You'll need to convert it." + Environment.NewLine;
+            if (AudioCodec.Contains("✕")) Errors = Errors + "The audio codec is not compatible with the switch. You'll need to convert it." + Environment.NewLine;
+            if (Width > 1280) Errors = Errors + "Your file's resolution is too wide - It will need to be resized to 720p or smaller." + Environment.NewLine;
+            if (Height > 720) Errors = Errors + "Your file's resolution is too high - It will need to be resized to 720p or smaller." + Environment.NewLine;
+
+            if (FileToCheckDialog.SafeFileName.Contains(" "))
+            {
+                Output = Output + Environment.NewLine + "!!!Please note, the switch does not play video files with spaces in the filename. You'll need to rename this video!!!" + Environment.NewLine;
+            }
+
+            if (Errors == "The following issues were found with your file (" + FileToCheckDialog.SafeFileName + "):" + Environment.NewLine)
+            {
+                if(Subtitle == String.Empty)
+                {
+                    MessageBox.Show(Output + Environment.NewLine + Resolution + Environment.NewLine + "Your file appears to be playable on the switch!");
+                }
+                else
+                {
+                    MessageBox.Show(Output + Environment.NewLine + Resolution + Environment.NewLine + "Your file appears to be playable on the switch! However, it seems to contain subtitles. These may or may not work on the switch. If they don't, you'll need to convert the file and select \"Keep subtitles\".");
+                }
+            }
+            else
+            {
+                MessageBox.Show(Output + Environment.NewLine + Resolution + Environment.NewLine + Errors);
             }
         }
     }

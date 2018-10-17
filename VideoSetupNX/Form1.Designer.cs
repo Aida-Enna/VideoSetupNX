@@ -48,6 +48,8 @@
             this.chkAspectRatio = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.chkKeepSubs = new System.Windows.Forms.CheckBox();
+            this.chkOnlyConvertAudio = new System.Windows.Forms.CheckBox();
+            this.btnCheckVideo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -185,7 +187,7 @@
             // chkResize
             // 
             this.chkResize.AutoSize = true;
-            this.chkResize.Location = new System.Drawing.Point(241, 240);
+            this.chkResize.Location = new System.Drawing.Point(244, 270);
             this.chkResize.Name = "chkResize";
             this.chkResize.Size = new System.Drawing.Size(154, 17);
             this.chkResize.TabIndex = 17;
@@ -197,7 +199,7 @@
             // 
             this.chkAspectRatio.AutoSize = true;
             this.chkAspectRatio.Enabled = false;
-            this.chkAspectRatio.Location = new System.Drawing.Point(241, 260);
+            this.chkAspectRatio.Location = new System.Drawing.Point(244, 285);
             this.chkAspectRatio.Name = "chkAspectRatio";
             this.chkAspectRatio.Size = new System.Drawing.Size(176, 17);
             this.chkAspectRatio.TabIndex = 18;
@@ -207,7 +209,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 291);
+            this.label2.Location = new System.Drawing.Point(12, 380);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(311, 39);
             this.label2.TabIndex = 19;
@@ -220,7 +222,7 @@
             // chkKeepSubs
             // 
             this.chkKeepSubs.AutoSize = true;
-            this.chkKeepSubs.Location = new System.Drawing.Point(241, 280);
+            this.chkKeepSubs.Location = new System.Drawing.Point(244, 300);
             this.chkKeepSubs.Name = "chkKeepSubs";
             this.chkKeepSubs.Size = new System.Drawing.Size(92, 17);
             this.chkKeepSubs.TabIndex = 20;
@@ -228,15 +230,38 @@
             this.chkKeepSubs.UseVisualStyleBackColor = true;
             this.chkKeepSubs.CheckedChanged += new System.EventHandler(this.chkKeepSubs_CheckedChanged);
             // 
+            // chkOnlyConvertAudio
+            // 
+            this.chkOnlyConvertAudio.AutoSize = true;
+            this.chkOnlyConvertAudio.Location = new System.Drawing.Point(244, 255);
+            this.chkOnlyConvertAudio.Name = "chkOnlyConvertAudio";
+            this.chkOnlyConvertAudio.Size = new System.Drawing.Size(115, 17);
+            this.chkOnlyConvertAudio.TabIndex = 21;
+            this.chkOnlyConvertAudio.Text = "Only convert audio";
+            this.chkOnlyConvertAudio.UseVisualStyleBackColor = true;
+            this.chkOnlyConvertAudio.CheckedChanged += new System.EventHandler(this.chkOnlyConvertAudio_CheckedChanged);
+            // 
+            // btnCheckVideo
+            // 
+            this.btnCheckVideo.Location = new System.Drawing.Point(12, 288);
+            this.btnCheckVideo.Name = "btnCheckVideo";
+            this.btnCheckVideo.Size = new System.Drawing.Size(226, 31);
+            this.btnCheckVideo.TabIndex = 22;
+            this.btnCheckVideo.Text = "Check video for Switch compatibility";
+            this.btnCheckVideo.UseVisualStyleBackColor = true;
+            this.btnCheckVideo.Click += new System.EventHandler(this.btnCheckVideo_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(413, 340);
+            this.ClientSize = new System.Drawing.Size(414, 442);
+            this.Controls.Add(this.btnCheckVideo);
             this.Controls.Add(this.chkKeepSubs);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.chkAspectRatio);
             this.Controls.Add(this.chkResize);
+            this.Controls.Add(this.chkOnlyConvertAudio);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.txtBannerFile);
             this.Controls.Add(this.lblStep3);
@@ -282,6 +307,8 @@
         private System.Windows.Forms.CheckBox chkAspectRatio;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkKeepSubs;
+        private System.Windows.Forms.CheckBox chkOnlyConvertAudio;
+        private System.Windows.Forms.Button btnCheckVideo;
     }
 }
 
