@@ -32,7 +32,7 @@ Follow each step, then hit "Generate project". It'll open the output directory w
 
 ![GUI Screenshot](https://i.imgur.com/pv9VFmH.png)
 
-![End Result](https://i.imgur.com/O7zpyQV.png)
+![End Result](https://i.imgur.com/1hu1SFj.png)
 
 ## Credits
 
