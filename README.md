@@ -17,7 +17,7 @@ Follow each step, then hit "Generate project". It'll open the output directory w
 
 __Screenshots__
 
-![GUI Screenshot](http://aida.moe/share/vXWH.png)
+![GUI Screenshot](http://aida.moe/share/BJeY.png)
 
 ![End Result](http://aida.moe/share/I3rd.png)
 
