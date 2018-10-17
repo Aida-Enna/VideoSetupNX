@@ -47,6 +47,7 @@
             this.chkResize = new System.Windows.Forms.CheckBox();
             this.chkAspectRatio = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkKeepSubs = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -184,7 +185,7 @@
             // chkResize
             // 
             this.chkResize.AutoSize = true;
-            this.chkResize.Location = new System.Drawing.Point(241, 249);
+            this.chkResize.Location = new System.Drawing.Point(241, 240);
             this.chkResize.Name = "chkResize";
             this.chkResize.Size = new System.Drawing.Size(154, 17);
             this.chkResize.TabIndex = 17;
@@ -196,7 +197,7 @@
             // 
             this.chkAspectRatio.AutoSize = true;
             this.chkAspectRatio.Enabled = false;
-            this.chkAspectRatio.Location = new System.Drawing.Point(241, 270);
+            this.chkAspectRatio.Location = new System.Drawing.Point(241, 260);
             this.chkAspectRatio.Name = "chkAspectRatio";
             this.chkAspectRatio.Size = new System.Drawing.Size(176, 17);
             this.chkAspectRatio.TabIndex = 18;
@@ -216,11 +217,23 @@
             this.label2.MouseLeave += new System.EventHandler(this.label2_MouseLeave);
             this.label2.MouseHover += new System.EventHandler(this.label2_MouseHover);
             // 
+            // chkKeepSubs
+            // 
+            this.chkKeepSubs.AutoSize = true;
+            this.chkKeepSubs.Location = new System.Drawing.Point(241, 280);
+            this.chkKeepSubs.Name = "chkKeepSubs";
+            this.chkKeepSubs.Size = new System.Drawing.Size(92, 17);
+            this.chkKeepSubs.TabIndex = 20;
+            this.chkKeepSubs.Text = "Keep subtitles";
+            this.chkKeepSubs.UseVisualStyleBackColor = true;
+            this.chkKeepSubs.CheckedChanged += new System.EventHandler(this.chkKeepSubs_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(413, 340);
+            this.Controls.Add(this.chkKeepSubs);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.chkAspectRatio);
             this.Controls.Add(this.chkResize);
@@ -268,6 +281,7 @@
         private System.Windows.Forms.CheckBox chkResize;
         private System.Windows.Forms.CheckBox chkAspectRatio;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkKeepSubs;
     }
 }
 

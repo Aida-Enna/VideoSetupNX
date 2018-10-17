@@ -101,7 +101,7 @@ namespace VideoPreperationTool
                 string Filename = file.FullName;
 
                 startInfo.FileName = @"cmd.exe";
-                startInfo.Arguments = "/C ffmpeg -y -ss 00:02:00 -i \"" + Filename + "\" -vframes 1 -s 140x140  \"Output\\img\\" + file.Name + "_thumb.png\"";
+                startInfo.Arguments = "/C ffmpeg -y -ss 00:01:00 -i \"" + Filename + "\" -vframes 1 -s 140x140  \"Output\\img\\" + file.Name + "_thumb.png\"";
                 startInfo.RedirectStandardOutput = true;
                 startInfo.UseShellExecute = false;
                 startInfo.CreateNoWindow = true;
@@ -190,6 +190,7 @@ namespace VideoPreperationTool
                 {
                     filepath = fbd.SelectedPath;
                 }
+                if (result == DialogResult.Cancel) return;
             }
 
             int count = 0;
@@ -205,20 +206,46 @@ namespace VideoPreperationTool
                 string FilenameAfterConversion = file.FullName + ".switch.mp4";
 
                 startInfo.FileName = @"cmd.exe";
-                if (chkResize.Checked)
+                if (chkKeepSubs.Checked)
                 {
-                    if (chkAspectRatio.Checked)
+                    if (chkResize.Checked)
                     {
-                        startInfo.Arguments = "/C ffmpeg -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -vf scale=-1:720 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                        if (chkAspectRatio.Checked)
+                        {
+                            //Resizing and keep aspect, keeping subs
+                            startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -disposition:s default+forced -filter_complex \"[0:v][sub]overlay,scale = -1:720\" -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                        }
+                        else
+                        {
+                            //Resizing, keeping subs
+                            startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -disposition:s default+forced -filter_complex \"[0:v][sub]overlay,scale = 1280:720\" -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                        }
+
                     }
                     else
                     {
-                        startInfo.Arguments = "/C ffmpeg -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -vf scale=1280:720 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                        //Keeping subs, no resize
+                        //cmd.exe /C ffmpeg -y -i "%1" -vcodec libx264 -preset fast -f mp4 -vf subtitles="%~n1%~x1" -disposition:s default+forced -c:a aac -ac 2 "%1.converted.mp4" & PAUSE
+                        startInfo.Arguments = startInfo.Arguments.Replace(" -c:a", " -vf subtitles=\"" + file.Name + "\" -disposition:s default+forced -c:a");
+                    }
+                 
+                }
+                if (chkResize.Checked & !chkKeepSubs.Checked)
+                {
+                    if (chkAspectRatio.Checked)
+                    {
+                        //Resize and keep aspect, no subs
+                        startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -vf scale=-1:720 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                    }
+                    else
+                    {
+                        //Resize, no subs
+                        startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -vf scale=1280:720 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
                     }
                 }
-                else
+                if (!chkResize.Checked & !chkKeepSubs.Checked)
                 {
-                    startInfo.Arguments = "/C ffmpeg -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
+                    startInfo.Arguments = "/C ffmpeg -y -i \"" + Filename + "\" -vcodec libx264 -preset fast -f mp4 -c:a aac -ac 2 \"" + FilenameAfterConversion + "\"";
                 }
                 startInfo.RedirectStandardOutput = true;
                 startInfo.UseShellExecute = false;
@@ -270,6 +297,32 @@ namespace VideoPreperationTool
         private void label2_MouseLeave(object sender, EventArgs e)
         {
             this.Cursor = Cursors.Default;
+        }
+
+        private void chkKeepSubs_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkKeepSubs.Checked) MessageBox.Show("PLEASE NOTE: Having this option on will keep the default/forced subtitles of all videos during conversion. -However-, it will fail to convert videos which do not have subs in them. Please keep this in mind when turning this on.");
+        }
+
+        public static void DeleteDirectory(string path)
+        {
+            foreach (string directory in Directory.GetDirectories(path))
+            {
+                DeleteDirectory(directory);
+            }
+
+            try
+            {
+                Directory.Delete(path, true);
+            }
+            catch (IOException)
+            {
+                Directory.Delete(path, true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Directory.Delete(path, true);
+            }
         }
     }
 }
